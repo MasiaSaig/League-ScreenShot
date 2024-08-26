@@ -4,9 +4,14 @@
 #include <QSystemTrayIcon>
 
 #ifndef QT_NO_SYSTEMTRAYICON
+#include "filemonitoring.h"
 #include <QMainWindow>
 #include <QDialog>
 #include <QFileDialog>
+
+#include <windows.h>
+#include <gdiplus.h>
+#pragma comment(lib,"gdiplus.lib")
 // #include <QVBoxLayout>
 
 QT_BEGIN_NAMESPACE
@@ -31,15 +36,13 @@ QT_END_NAMESPACE
 // }
 // QT_END_NAMESPACE
 
-class MainWindow :  public QMainWindow //public QDialog
+class MainWindow :  public QMainWindow
 {
     Q_OBJECT
 
 public:
     MainWindow(QWidget *parent = nullptr);
-    // ~MainWindow();
-
-    // void setVisible(bool visible) override;
+    ~MainWindow();
 
 private slots:
     void browse();
@@ -65,9 +68,14 @@ private:
 
     QString *dir;
 
+public slots:
+    void errorString(QString err);
+
 private:
     QString m_directory;
-    // Ui::MainWindow *ui;
+    DirectoryMonitoringController* m_dirMonitoringController;
+    QThread* m_dirMonitoringThread;
+
 };
 
 #endif // QT_NO_SYSTEMTRAYICON

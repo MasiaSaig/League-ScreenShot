@@ -294,6 +294,12 @@ CMAKE_TAPI:FILEPATH=CMAKE_TAPI-NOTFOUND
 // Studio IDE projects all commands are done without /nologo.
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 
+//Path to a library.
+GDIPLUS_LIB:FILEPATH=GDIPLUS_LIB-NOTFOUND
+
+//Path to a library.
+GDIPLUS_LIBRARY:FILEPATH=GDIPLUS_LIBRARY-NOTFOUND
+
 //Value Computed by CMake
 LeagueScreenSaver_BINARY_DIR:STATIC=D:/CodeProject/1-C++/Qt/LeagueScreenSaver/build/Desktop_Qt_6_7_2_MinGW_64_bit-Debug
 

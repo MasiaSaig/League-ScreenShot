@@ -258,6 +258,12 @@
 	"HEADERS" : 
 	[
 		[
+			"D:/CodeProject/1-C++/Qt/LeagueScreenSaver/filemonitoring.h",
+			"MU",
+			"EWIEGA46WW/moc_filemonitoring.cpp",
+			null
+		],
+		[
 			"D:/CodeProject/1-C++/Qt/LeagueScreenSaver/mainwindow.h",
 			"MU",
 			"EWIEGA46WW/moc_mainwindow.cpp",
@@ -335,6 +341,11 @@
 	"SETTINGS_FILE" : "D:/CodeProject/1-C++/Qt/LeagueScreenSaver/build/Desktop_Qt_6_7_2_MinGW_64_bit-Debug/CMakeFiles/LeagueScreenSaver_autogen.dir/AutogenUsed.txt",
 	"SOURCES" : 
 	[
+		[
+			"D:/CodeProject/1-C++/Qt/LeagueScreenSaver/filemonitoring.cpp",
+			"MU",
+			null
+		],
 		[ "D:/CodeProject/1-C++/Qt/LeagueScreenSaver/main.cpp", "MU", null ],
 		[
 			"D:/CodeProject/1-C++/Qt/LeagueScreenSaver/mainwindow.cpp",

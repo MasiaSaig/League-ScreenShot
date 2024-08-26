@@ -29,7 +29,8 @@ MainWindow::MainWindow(QWidget *parent) //QWidget *parent
     pathDirectoryLabel = new QLabel("Directory:");
     pathDirectoryButton = new QPushButton();    // "Browse Directory Path"
     pathDirectoryButton->setIcon(pathDirectoryButton->style()->standardIcon(QStyle::SP_DirHomeIcon));
-    pathDirectoryEdit = new QLineEdit("C:/Riot/League of Legends/Screenshot");
+    // TODO: load path from file
+    pathDirectoryEdit = new QLineEdit("H:/Riot Games/League of Legends/Screenshots");
 
     // connecting signals
     connect(pathDirectoryButton, SIGNAL(clicked()), SLOT(browse()));
@@ -53,19 +54,28 @@ MainWindow::MainWindow(QWidget *parent) //QWidget *parent
     setWindowTitle(tr("League Screen Show"));
     setWindowIcon(QIcon(iconPath));
     setFixedSize(400, 64);
+
+    // fileMonitoringController.changeDirectory("H:/Riot Games/League of Legends/Screenshots");
+    // fileMonitoringController.runDirectoryMonitoring();
+    m_dirMonitoringController = new DirectoryMonitoringController((wchar_t*)"H:\\Riot Games\\League of Legends\\Screenshots\\");
+    m_dirMonitoringThread = new QThread();
+    m_dirMonitoringController->moveToThread(m_dirMonitoringThread);
+    connect( m_dirMonitoringController, &DirectoryMonitoringController::error, this, &MainWindow::errorString);
+    connect( m_dirMonitoringThread, &QThread::started, m_dirMonitoringController, &DirectoryMonitoringController::runDirectoryMonitoring);
+    connect( m_dirMonitoringController, &DirectoryMonitoringController::finished,  m_dirMonitoringThread, &QThread::quit);
+
+    m_dirMonitoringThread->start();
 }
 
-// MainWindow::~MainWindow()
-// {
-//     // delete ui;
-// }
+MainWindow::~MainWindow()
+{
+    m_dirMonitoringController.quit();
+    m_dirMonitoringThread->wait();
+}
 
-// void MainWindow::setVisible(bool visible)
-// {
-//     minimizeAction->setEnabled(visible);
-//     restoreAction->setEnabled(isMaximized() || !visible);
-//     QMainWindow::setVisible(visible);
-// }
+void MainWindow::errorString(QString err){
+    qDebug() << err;
+}
 
 void MainWindow::createActions()
 {
@@ -93,13 +103,14 @@ void MainWindow::createTrayIcon(const QString &iconPath)
 
 void MainWindow::onEditingFinished()
 {
+    qDebug() << "Editing Finished, path: " << pathDirectoryEdit->text();
     if(pathDirectoryEdit->text().back() == '/'){
-        m_directory = pathDirectoryEdit->text();
+        // m_directory = pathDirectoryEdit->text();
+        m_dirMonitoringController.changeDirectory(pathDirectoryEdit->text());
     }else{
-        m_directory = pathDirectoryEdit->text() + '/';
+        // m_directory = pathDirectoryEdit->text() + '/';
+        m_dirMonitoringController.changeDirectory(pathDirectoryEdit->text() + '/');
     }
-
-    qDebug() << m_directory;
 }
 
 void MainWindow::browse()
@@ -113,9 +124,10 @@ void MainWindow::browse()
     if(directory.isEmpty()){
         return;
     }
-    m_directory = directory + '/';
     pathDirectoryEdit->setText(directory + '/');
-    qDebug() << m_directory;
+    qDebug() << "Browse, setting path:" << directory;
+    m_dirMonitoringController.changeDirectory(directory + '/');
 }
+
 
 #endif
