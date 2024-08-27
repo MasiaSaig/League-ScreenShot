@@ -6,35 +6,32 @@
 #include <gdiplus.h>
 #pragma comment(lib,"gdiplus.lib")
 
-DirectoryMonitoringController::DirectoryMonitoringController(const wchar_t* dirPath)
+// void DirectoryMonitoringController::printDir() const{
+//     qDebug() << "Directory after replace and conversion QString: " << QString::fromWCharArray(m_dirPath);
+//     qDebug() << "Directory after replace and conversion wstring: " << std::wstring(m_dirPath, m_lenDirPath);
+//     qDebug() << "Directory after replace and conversion wchar_t*: " << m_dirPath;
+// }
+
+DirectoryMonitoringController::DirectoryMonitoringController(DirectoryPath *dirPath) :
+    m_dirPath{dirPath}
 {
-    // TODO: load data from file
-    // m_dirPath = ;
-
-    // m_directoryMonitoringThread = QThread::create(runDirectoryMonitoring());
-
-    // Gdi Plus initialization
-    Gdiplus::GdiplusStartupInput gdiplusStartupInput;
-    Gdiplus::GdiplusStartup(&m_gdiplusToken, &gdiplusStartupInput, nullptr);
-
-    qDebug() << "Initialization directory path: " << QString::fromWCharArray(m_dirPath);
-    changeDirectory("H:/Riot Games/League of Legends/Screenshots/");
+    qDebug() << "Initializing DMC.";
 }
 
 DirectoryMonitoringController::~DirectoryMonitoringController()
 {
-    quit();
-    CloseHandle(m_hDir);
-    Gdiplus::GdiplusShutdown(m_gdiplusToken);
+    qDebug() << "Cleaning up, done.";
 }
 
 
-void DirectoryMonitoringController::runDirectoryMonitoring()
-{
+void DirectoryMonitoringController::run(){
+    qDebug() << "Starting directory monitoring.";
+    qDebug() << "dirPath addresss inside another Thread: " << m_dirPath;
+    qDebug() << "dirPath path inside another Thread: " << QString::fromWCharArray(m_dirPath->getDirPath());
     // main file monitoring loop
     while (m_running) {
         if (ReadDirectoryChangesW(
-                m_hDir,                        // Handle to directory
+                m_dirPath->getDHandler(),      // Handle to directory
                 m_buffer,                      // Buffer to receive changes
                 BUFFERSIZE,                    // Buffer size
                 FALSE,                         // Monitor subdirectories
@@ -45,11 +42,13 @@ void DirectoryMonitoringController::runDirectoryMonitoring()
                 )) {
             FILE_NOTIFY_INFORMATION* fni = reinterpret_cast<FILE_NOTIFY_INFORMATION*>(m_buffer);
             if (fni->Action == FILE_ACTION_ADDED) {
+                qDebug() << "On new file.";
                 size_t lenFileName = fni->FileNameLength / sizeof(WCHAR);
-                qDebug() << L"New file created: " << std::wstring(fni->FileName, lenFileName);
+                qDebug() << "New file created: " << std::wstring(fni->FileName, lenFileName);
+                qDebug() << QString::fromWCharArray(m_dirPath->getDirPath());
 
                 // concatenating folder path, with new file name
-                size_t lenFullFilePath = m_lenDirPath + lenFileName + 1;
+                size_t lenFullFilePath = m_dirPath->getLenDirPath() + lenFileName + 1;
                 wchar_t* fullFilePath = new wchar_t[lenFullFilePath];
                 if (fullFilePath == nullptr) {
                     qDebug() << "Memmory allocation failed!";
@@ -57,10 +56,13 @@ void DirectoryMonitoringController::runDirectoryMonitoring()
                 }
                 wchar_t* fileName = fni->FileName;
 
-                wcscpy_s(fullFilePath, m_lenDirPath+1, m_dirPath);
+                qDebug() << "Len: " << m_dirPath->getLenDirPath() << ". Dir path: " << QString::fromWCharArray(m_dirPath->getDirPath());
+                wcscpy_s(fullFilePath, m_dirPath->getLenDirPath()+1, m_dirPath->getDirPath());
+                qDebug() << "Full file Path: " << QString::fromWCharArray(fullFilePath);
                 wcsncat_s(fullFilePath, lenFullFilePath, fileName, lenFileName);
 
-                qDebug() << fullFilePath;
+                qDebug() << "Full new file path: "<< fullFilePath;
+                qDebug() << "Full new file path(to QString): " << QString::fromWCharArray(fullFilePath);
                 copyToClipboard(fullFilePath);
 
                 delete [] fullFilePath;
@@ -68,54 +70,16 @@ void DirectoryMonitoringController::runDirectoryMonitoring()
         }
         else {
             qDebug() << "Failed to read directory changes. Error: " << GetLastError();
-            qDebug() << "Directory path: " << m_dirPath;
+            qDebug() << "Handler to directory: " << m_dirPath->getDHandler();
+            qDebug() << "Directory path: " << QString::fromWCharArray(m_dirPath->getDirPath());
             break;
         }
-    }
-    emit finished();
-}
-
-void DirectoryMonitoringController::changeDirectory(QString dirPath)
-{
-    qDebug() << "Directory before replace: " << dirPath;
-    dirPath = dirPath.replace('/', "\\");
-    qDebug() << "Directory after replace: " << dirPath;
-    auto archiveWString = dirPath.toStdWString();
-    m_dirPath = const_cast<wchar_t *>(archiveWString.c_str());
-    m_lenDirPath = wcslen(m_dirPath);
-    qDebug() << "Directory after replace and conversion" << QString::fromWCharArray(m_dirPath);
-
-    m_hDir = CreateFile(
-        m_dirPath,    // Directory to monitor
-        FILE_LIST_DIRECTORY,                // Access type
-        FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, // Share mode
-        NULL,                               // Security attributes
-        OPEN_EXISTING,                      // Creation disposition     //CREATE_NEW
-        FILE_FLAG_BACKUP_SEMANTICS,         // Flags and attributes, FILE_FLAG_BACKUP_SEMANTICS needed for directories
-        NULL                                // Template file
-        );
-
-    // if folder already exists, create handler to existing folder
-    if ((m_hDir == INVALID_HANDLE_VALUE) && (GetLastError() == ERROR_FILE_EXISTS)) {
-        m_hDir = CreateFile(
-            m_dirPath,
-            FILE_LIST_DIRECTORY,
-            FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
-            NULL,
-            OPEN_EXISTING,
-            FILE_FLAG_BACKUP_SEMANTICS,
-            NULL
-            );
-    }
-
-    if (m_hDir == INVALID_HANDLE_VALUE) {
-        qDebug() << "Failed to get directory handle. Error: " << GetLastError() << " Directory path:" << dirPath;
     }
 }
 
 void DirectoryMonitoringController::copyToClipboard(const wchar_t* filePath)
 {
-    qDebug() << filePath;
+    qDebug() << QString::fromWCharArray(filePath);
     Gdiplus::Bitmap gdibmp(filePath);
     if (gdibmp.GetLastStatus() != Gdiplus::Ok)
         return;
@@ -135,6 +99,7 @@ void DirectoryMonitoringController::copyToClipboard(const wchar_t* filePath)
         ReleaseDC(NULL, hdc);
 
         if (OpenClipboard(NULL)){
+            qDebug() << "Copying image.";
             EmptyClipboard();
             //DWORD CF_PNG = RegisterClipboardFormat(L"PNG");
             SetClipboardData(CF_BITMAP, hbitmap_ddb);
@@ -151,3 +116,93 @@ void DirectoryMonitoringController::copyToClipboard(const wchar_t* filePath)
 void DirectoryMonitoringController::quit(){
     m_running = false;
 }
+
+
+
+
+// void DirectoryMonitoringController::changeDirectory(QString dirPath)
+// {
+//     qDebug() << "Directory before replace: " << dirPath;
+//     dirPath = dirPath.replace('/', "\\");
+//     qDebug() << "Directory after replace: " << dirPath;
+//     auto archiveWString = dirPath.toStdWString();
+//     m_dirPath = const_cast<wchar_t *>(archiveWString.c_str());
+//     m_lenDirPath = wcslen(m_dirPath);
+
+//     m_hDir = CreateFile(
+//         m_dirPath,    // Directory to monitor
+//         FILE_LIST_DIRECTORY,                // Access type
+//         FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, // Share mode
+//         NULL,                               // Security attributes
+//         OPEN_EXISTING,                      // Creation disposition     //CREATE_NEW
+//         FILE_FLAG_BACKUP_SEMANTICS,         // Flags and attributes, FILE_FLAG_BACKUP_SEMANTICS needed for directories
+//         NULL                                // Template file
+//         );
+
+//     // if folder already exists, create handler to existing folder
+//     if ((m_hDir == INVALID_HANDLE_VALUE) && (GetLastError() == ERROR_FILE_EXISTS)) {
+//         m_hDir = CreateFile(
+//             m_dirPath,
+//             FILE_LIST_DIRECTORY,
+//             FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
+//             NULL,
+//             OPEN_EXISTING,
+//             FILE_FLAG_BACKUP_SEMANTICS,
+//             NULL
+//             );
+//     }
+
+//     if (m_hDir == INVALID_HANDLE_VALUE) {
+//         qDebug() << "Failed to get directory handle. Error: " << GetLastError() << " Directory path:" << dirPath;
+//     }
+//     printDir();
+// }
+
+// void DirectoryMonitoringController::runDirectoryMonitoring()
+// {
+//     qDebug() << "Before directory monitoring.";
+//     // main file monitoring loop
+//     while (m_running) {
+//         if (ReadDirectoryChangesW(
+//                 m_dirPath->getDHandler(),                        // Handle to directory
+//                 m_buffer,                      // Buffer to receive changes
+//                 BUFFERSIZE,                    // Buffer size
+//                 FALSE,                         // Monitor subdirectories
+//                 FILE_NOTIFY_CHANGE_FILE_NAME,  // Changes to monitor
+//                 &m_bytesReturned,              // Number of bytes returned
+//                 NULL,                          // Overlapped structure
+//                 NULL                           // Completion routine
+//                 )) {
+//             FILE_NOTIFY_INFORMATION* fni = reinterpret_cast<FILE_NOTIFY_INFORMATION*>(m_buffer);
+//             if (fni->Action == FILE_ACTION_ADDED) {
+//                 qDebug() << "On new file.";
+//                 size_t lenFileName = fni->FileNameLength / sizeof(WCHAR);
+//                 qDebug() << "New file created: " << std::wstring(fni->FileName, lenFileName);
+//                 qDebug() << std::wstring(m_dirPath->getDirPath(), m_dirPath->getLenDirPath());
+
+//                 // concatenating folder path, with new file name
+//                 size_t lenFullFilePath = m_dirPath->getLenDirPath() + lenFileName + 1;
+//                 wchar_t* fullFilePath = new wchar_t[lenFullFilePath];
+//                 if (fullFilePath == nullptr) {
+//                     qDebug() << "Memmory allocation failed!";
+//                     break;
+//                 }
+//                 wchar_t* fileName = fni->FileName;
+
+//                 wcscpy_s(fullFilePath, m_dirPath->getLenDirPath()+1, m_dirPath->getDirPath());
+//                 wcsncat_s(fullFilePath, lenFullFilePath, fileName, lenFileName);
+
+//                 qDebug() << fullFilePath;
+//                 qDebug() << std::wstring(fullFilePath, lenFullFilePath);
+//                 copyToClipboard(fullFilePath);
+
+//                 delete [] fullFilePath;
+//             }
+//         }
+//         else {
+//             qDebug() << "Failed to read directory changes. Error: " << GetLastError();
+//             qDebug() << "Directory path: " << m_dirPath;
+//             break;
+//         }
+//     }
+// }

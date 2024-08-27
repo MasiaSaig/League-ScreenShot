@@ -20,6 +20,10 @@ MainWindow::MainWindow(QWidget *parent) //QWidget *parent
 {
         // ui->setupUi(this);
 
+    // Gdi Plus initialization
+    Gdiplus::GdiplusStartupInput gdiplusStartupInput;
+    Gdiplus::GdiplusStartup(&m_gdiplusToken, &gdiplusStartupInput, nullptr);
+
     const QString iconPath = ":/icon.png";
     createActions();
     createTrayIcon(iconPath);
@@ -57,20 +61,31 @@ MainWindow::MainWindow(QWidget *parent) //QWidget *parent
 
     // fileMonitoringController.changeDirectory("H:/Riot Games/League of Legends/Screenshots");
     // fileMonitoringController.runDirectoryMonitoring();
-    m_dirMonitoringController = new DirectoryMonitoringController((wchar_t*)"H:\\Riot Games\\League of Legends\\Screenshots\\");
-    m_dirMonitoringThread = new QThread();
-    m_dirMonitoringController->moveToThread(m_dirMonitoringThread);
-    connect( m_dirMonitoringController, &DirectoryMonitoringController::error, this, &MainWindow::errorString);
-    connect( m_dirMonitoringThread, &QThread::started, m_dirMonitoringController, &DirectoryMonitoringController::runDirectoryMonitoring);
-    connect( m_dirMonitoringController, &DirectoryMonitoringController::finished,  m_dirMonitoringThread, &QThread::quit);
+    // m_dirMonitoringController = new DirectoryMonitoringController();    // (wchar_t*)"H:\\Riot Games\\League of Legends\\Screenshots\\"
+    // m_dirMonitoringThread = new QThread();
+    // m_dirMonitoringController->moveToThread(m_dirMonitoringThread);
+    // connect( m_dirMonitoringController, &DirectoryMonitoringController::error, this, &MainWindow::errorString);
+    // connect( m_dirMonitoringThread, &QThread::started, m_dirMonitoringController, &DirectoryMonitoringController::runDirectoryMonitoring);
+    // connect( m_dirMonitoringController, &DirectoryMonitoringController::finished,  m_dirMonitoringThread, &QThread::quit);
 
-    m_dirMonitoringThread->start();
+    // m_dirMonitoringThread->start();
+
+    QString temp = "H:/Riot Games/League of Legends/Screenshots/";
+    m_dirPath = new DirectoryPath(temp);
+    qDebug() << "dirPath addres: " << m_dirPath;
+    qDebug() << "dirPath path: " << QString::fromWCharArray(m_dirPath->getDirPath());
+    m_dirMonitoringController = new DirectoryMonitoringController(m_dirPath);
+    qDebug() << "Starting threads.";
+    m_dirMonitoringController->start();
+
 }
 
 MainWindow::~MainWindow()
 {
-    m_dirMonitoringController.quit();
-    m_dirMonitoringThread->wait();
+    qDebug() << "Cleaning up MainWindow. Closing threads.";
+    m_dirMonitoringController->quit();
+    m_dirMonitoringController->wait();
+    Gdiplus::GdiplusShutdown(m_gdiplusToken);
 }
 
 void MainWindow::errorString(QString err){
@@ -106,10 +121,10 @@ void MainWindow::onEditingFinished()
     qDebug() << "Editing Finished, path: " << pathDirectoryEdit->text();
     if(pathDirectoryEdit->text().back() == '/'){
         // m_directory = pathDirectoryEdit->text();
-        m_dirMonitoringController.changeDirectory(pathDirectoryEdit->text());
+        m_dirPath->setDirPath(pathDirectoryEdit->text());
     }else{
         // m_directory = pathDirectoryEdit->text() + '/';
-        m_dirMonitoringController.changeDirectory(pathDirectoryEdit->text() + '/');
+        m_dirPath->setDirPath(pathDirectoryEdit->text() + '/');
     }
 }
 
@@ -126,7 +141,7 @@ void MainWindow::browse()
     }
     pathDirectoryEdit->setText(directory + '/');
     qDebug() << "Browse, setting path:" << directory;
-    m_dirMonitoringController.changeDirectory(directory + '/');
+    m_dirPath->setDirPath(directory + '/');
 }
 
 

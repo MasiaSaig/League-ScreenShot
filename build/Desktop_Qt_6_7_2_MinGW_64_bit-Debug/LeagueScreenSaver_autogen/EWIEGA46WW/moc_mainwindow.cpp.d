@@ -1,6 +1,9 @@
 D:/CodeProject/1-C++/Qt/LeagueScreenSaver/build/Desktop_Qt_6_7_2_MinGW_64_bit-Debug/LeagueScreenSaver_autogen/EWIEGA46WW/moc_mainwindow.cpp: D:/CodeProject/1-C++/Qt/LeagueScreenSaver/mainwindow.h \
   D:/CodeProject/1-C++/Qt/LeagueScreenSaver/build/Desktop_Qt_6_7_2_MinGW_64_bit-Debug/LeagueScreenSaver_autogen/moc_predefs.h \
+  D:/CodeProject/1-C++/Qt/LeagueScreenSaver/directorypath.h \
   D:/CodeProject/1-C++/Qt/LeagueScreenSaver/filemonitoring.h \
+  H:/Qt/6.7.2/mingw_64/include/QtCore/QDebug \
+  H:/Qt/6.7.2/mingw_64/include/QtCore/QMutex \
   H:/Qt/6.7.2/mingw_64/include/QtCore/QString \
   H:/Qt/6.7.2/mingw_64/include/QtCore/QThread \
   H:/Qt/6.7.2/mingw_64/include/QtCore/q20functional.h \
@@ -71,6 +74,7 @@ D:/CodeProject/1-C++/Qt/LeagueScreenSaver/build/Desktop_Qt_6_7_2_MinGW_64_bit-De
   H:/Qt/6.7.2/mingw_64/include/QtCore/qmetacontainer.h \
   H:/Qt/6.7.2/mingw_64/include/QtCore/qmetatype.h \
   H:/Qt/6.7.2/mingw_64/include/QtCore/qminmax.h \
+  H:/Qt/6.7.2/mingw_64/include/QtCore/qmutex.h \
   H:/Qt/6.7.2/mingw_64/include/QtCore/qnamespace.h \
   H:/Qt/6.7.2/mingw_64/include/QtCore/qnumeric.h \
   H:/Qt/6.7.2/mingw_64/include/QtCore/qobject.h \
@@ -120,6 +124,7 @@ D:/CodeProject/1-C++/Qt/LeagueScreenSaver/build/Desktop_Qt_6_7_2_MinGW_64_bit-De
   H:/Qt/6.7.2/mingw_64/include/QtCore/qtnoop.h \
   H:/Qt/6.7.2/mingw_64/include/QtCore/qtpreprocessorsupport.h \
   H:/Qt/6.7.2/mingw_64/include/QtCore/qtresource.h \
+  H:/Qt/6.7.2/mingw_64/include/QtCore/qtsan_impl.h \
   H:/Qt/6.7.2/mingw_64/include/QtCore/qttranslation.h \
   H:/Qt/6.7.2/mingw_64/include/QtCore/qttypetraits.h \
   H:/Qt/6.7.2/mingw_64/include/QtCore/qtversion.h \

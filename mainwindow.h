@@ -12,7 +12,8 @@
 #include <windows.h>
 #include <gdiplus.h>
 #pragma comment(lib,"gdiplus.lib")
-// #include <QVBoxLayout>
+
+#include "directorypath.h"
 
 QT_BEGIN_NAMESPACE
 class QAction;
@@ -48,6 +49,9 @@ private slots:
     void browse();
     void onEditingFinished();
 
+signals:
+    void changingDirectory(QString dirPath);
+
 private:
     void createActions();
     void createTrayIcon(const QString &iconPath);
@@ -66,16 +70,16 @@ private:
     QSystemTrayIcon *trayIcon;
     QMenu *trayIconMenu;
 
-    QString *dir;
-
 public slots:
     void errorString(QString err);
 
 private:
-    QString m_directory;
-    DirectoryMonitoringController* m_dirMonitoringController;
-    QThread* m_dirMonitoringThread;
+    DirectoryPath *m_dirPath;
+    DirectoryMonitoringController *m_dirMonitoringController;
+    // QThread *m_dirMonitoringThread;
 
+private:
+    ULONG_PTR m_gdiplusToken;
 };
 
 #endif // QT_NO_SYSTEMTRAYICON
