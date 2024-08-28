@@ -84,12 +84,15 @@ MainWindow::~MainWindow()
 {
     qDebug() << "Cleaning up MainWindow. Closing threads.";
     m_dirMonitoringController->quit();
+    delete m_dirPath;
     m_dirMonitoringController->wait();
     Gdiplus::GdiplusShutdown(m_gdiplusToken);
-}
 
-void MainWindow::errorString(QString err){
-    qDebug() << err;
+    delete m_dirMonitoringController;
+
+    delete quitAction; delete restoreAction; delete minimizeAction;
+    delete pathDirectoryButton; delete pathDirectoryEdit; delete pathDirectoryLabel;
+    delete infoLabel; delete vLayout; delete hLayout;
 }
 
 void MainWindow::createActions()
@@ -103,6 +106,7 @@ void MainWindow::createActions()
     quitAction = new QAction(tr("&Quit"), this);
     connect(quitAction, &QAction::triggered, qApp, &QCoreApplication::quit);
 }
+
 void MainWindow::createTrayIcon(const QString &iconPath)
 {
     trayIconMenu = new QMenu(this);

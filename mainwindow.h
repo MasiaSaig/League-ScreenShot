@@ -70,9 +70,6 @@ private:
     QSystemTrayIcon *trayIcon;
     QMenu *trayIconMenu;
 
-public slots:
-    void errorString(QString err);
-
 private:
     DirectoryPath *m_dirPath;
     DirectoryMonitoringController *m_dirMonitoringController;

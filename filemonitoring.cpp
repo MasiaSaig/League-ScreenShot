@@ -2,6 +2,9 @@
 
 #include <QDebug>
 #include <QString>
+#include <QTime>
+#include <QCoreApplication>
+
 #include <objidl.h>
 #include <gdiplus.h>
 #pragma comment(lib,"gdiplus.lib")
@@ -26,8 +29,6 @@ DirectoryMonitoringController::~DirectoryMonitoringController()
 
 void DirectoryMonitoringController::run(){
     qDebug() << "Starting directory monitoring.";
-    qDebug() << "dirPath addresss inside another Thread: " << m_dirPath;
-    qDebug() << "dirPath path inside another Thread: " << QString::fromWCharArray(m_dirPath->getDirPath());
     // main file monitoring loop
     while (m_running) {
         if (ReadDirectoryChangesW(
@@ -35,7 +36,7 @@ void DirectoryMonitoringController::run(){
                 m_buffer,                      // Buffer to receive changes
                 BUFFERSIZE,                    // Buffer size
                 FALSE,                         // Monitor subdirectories
-                FILE_NOTIFY_CHANGE_FILE_NAME,  // Changes to monitor
+                FILE_NOTIFY_CHANGE_FILE_NAME,  // Changes to monitor    //FILE_NOTIFY_CHANGE_FILE_NAME
                 &m_bytesReturned,              // Number of bytes returned
                 NULL,                          // Overlapped structure
                 NULL                           // Completion routine
@@ -74,17 +75,30 @@ void DirectoryMonitoringController::run(){
             qDebug() << "Directory path: " << QString::fromWCharArray(m_dirPath->getDirPath());
             break;
         }
+
     }
+    qDebug() << "Ending directory monitoring.";
 }
 
-void DirectoryMonitoringController::copyToClipboard(const wchar_t* filePath)
+void DirectoryMonitoringController::copyToClipboard(const WCHAR* filePath)
 {
+    qDebug() << "Trying to copy image to clipboard.";
     qDebug() << QString::fromWCharArray(filePath);
-    Gdiplus::Bitmap gdibmp(filePath);
-    if (gdibmp.GetLastStatus() != Gdiplus::Ok)
+    // wait for a file to finish being copied, for max time of maxWaitTime(2 seconds)
+    QTime maxWaitTime = QTime::currentTime().addSecs(2);
+    int bitmapStatus;
+    Gdiplus::Bitmap* gdibmp = Gdiplus::Bitmap::FromFile(filePath);
+    while((QTime::currentTime() < maxWaitTime) && (bitmapStatus != Gdiplus::Ok)){
+        QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+        gdibmp = Gdiplus::Bitmap::FromFile(filePath);
+        bitmapStatus = gdibmp->GetLastStatus();
+    }
+    if (bitmapStatus != Gdiplus::Ok){
+        qDebug() << "Wrong gdibmp status." << bitmapStatus ;
         return;
+    }
     HBITMAP hbitmap;
-    auto status = gdibmp.GetHBITMAP(0, &hbitmap);
+    auto status = gdibmp->GetHBITMAP(0, &hbitmap);
     if (status != Gdiplus::Ok) {
         qDebug() << "Wrong bitmap status. - " << status;
         return;
@@ -93,6 +107,7 @@ void DirectoryMonitoringController::copyToClipboard(const wchar_t* filePath)
     GetObject(hbitmap, sizeof bm, &bm);
     DIBSECTION ds;
     if (sizeof ds == GetObject(hbitmap, sizeof ds, &ds)){
+        qDebug() << "Got object.";
         HDC hdc = GetDC(NULL);
         HBITMAP hbitmap_ddb = CreateDIBitmap(hdc, &ds.dsBmih, CBM_INIT,
                                              ds.dsBm.bmBits, (BITMAPINFO*)&ds.dsBmih, DIB_RGB_COLORS);
@@ -111,6 +126,7 @@ void DirectoryMonitoringController::copyToClipboard(const wchar_t* filePath)
         DeleteObject(hbitmap_ddb);
     }
     DeleteObject(hbitmap);
+    qDebug() << "Finished copying to clipboard.";
 }
 
 void DirectoryMonitoringController::quit(){

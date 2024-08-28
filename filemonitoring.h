@@ -30,6 +30,7 @@ private:
     static const int BUFFERSIZE = 1024;
     char m_buffer[BUFFERSIZE];
     DWORD m_bytesReturned;
+
     bool m_running = true;
 
 };
