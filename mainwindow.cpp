@@ -59,21 +59,11 @@ MainWindow::MainWindow(QWidget *parent) //QWidget *parent
     setWindowIcon(QIcon(iconPath));
     setFixedSize(400, 64);
 
-    // fileMonitoringController.changeDirectory("H:/Riot Games/League of Legends/Screenshots");
-    // fileMonitoringController.runDirectoryMonitoring();
-    // m_dirMonitoringController = new DirectoryMonitoringController();    // (wchar_t*)"H:\\Riot Games\\League of Legends\\Screenshots\\"
-    // m_dirMonitoringThread = new QThread();
-    // m_dirMonitoringController->moveToThread(m_dirMonitoringThread);
-    // connect( m_dirMonitoringController, &DirectoryMonitoringController::error, this, &MainWindow::errorString);
-    // connect( m_dirMonitoringThread, &QThread::started, m_dirMonitoringController, &DirectoryMonitoringController::runDirectoryMonitoring);
-    // connect( m_dirMonitoringController, &DirectoryMonitoringController::finished,  m_dirMonitoringThread, &QThread::quit);
-
-    // m_dirMonitoringThread->start();
-
-    QString temp = "H:/Riot Games/League of Legends/Screenshots/";
-    m_dirPath = new DirectoryPath(temp);
+    // preparing Directory Controller class
+    m_dirPath = new DirectoryPath("H:/Riot Games/League of Legends/Screenshots/");
     qDebug() << "dirPath addres: " << m_dirPath;
     qDebug() << "dirPath path: " << QString::fromWCharArray(m_dirPath->getDirPath());
+    // creating a new thread and starting it
     m_dirMonitoringController = new DirectoryMonitoringController(m_dirPath);
     qDebug() << "Starting threads.";
     m_dirMonitoringController->start();
@@ -82,17 +72,22 @@ MainWindow::MainWindow(QWidget *parent) //QWidget *parent
 
 MainWindow::~MainWindow()
 {
+    // closing thread and cleaning up data
     qDebug() << "Cleaning up MainWindow. Closing threads.";
     m_dirMonitoringController->quit();
-    delete m_dirPath;
+    // using terminate is discouraged :/
+    m_dirMonitoringController->terminate();
     m_dirMonitoringController->wait();
     Gdiplus::GdiplusShutdown(m_gdiplusToken);
 
     delete m_dirMonitoringController;
+    delete m_dirPath;
 
     delete quitAction; delete restoreAction; delete minimizeAction;
     delete pathDirectoryButton; delete pathDirectoryEdit; delete pathDirectoryLabel;
-    delete infoLabel; delete vLayout; delete hLayout;
+    delete infoLabel;
+    delete vLayout;
+    // delete hLayout;
 }
 
 void MainWindow::createActions()
@@ -124,17 +119,14 @@ void MainWindow::onEditingFinished()
 {
     qDebug() << "Editing Finished, path: " << pathDirectoryEdit->text();
     if(pathDirectoryEdit->text().back() == '/'){
-        // m_directory = pathDirectoryEdit->text();
         m_dirPath->setDirPath(pathDirectoryEdit->text());
     }else{
-        // m_directory = pathDirectoryEdit->text() + '/';
         m_dirPath->setDirPath(pathDirectoryEdit->text() + '/');
     }
 }
 
 void MainWindow::browse()
 {
-    // QString directory = QFileDialog::getExistingDirectory(this, tr("Find Files"), QDir::currentPath());
     QString directory = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
                                                           "/home",
                                                           QFileDialog::ShowDirsOnly
