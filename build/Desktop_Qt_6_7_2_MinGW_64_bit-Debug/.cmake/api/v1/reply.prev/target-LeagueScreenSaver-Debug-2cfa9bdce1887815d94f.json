@@ -75,13 +75,13 @@
 			{
 				"command" : 4,
 				"file" : 1,
-				"line" : 66,
+				"line" : 68,
 				"parent" : 0
 			},
 			{
 				"command" : 5,
 				"file" : 1,
-				"line" : 49,
+				"line" : 51,
 				"parent" : 0
 			},
 			{
@@ -366,7 +366,9 @@
 				1,
 				2,
 				6,
-				8
+				8,
+				10,
+				12
 			]
 		}
 	],
@@ -496,7 +498,9 @@
 				1,
 				2,
 				6,
-				8
+				8,
+				10,
+				12
 			]
 		},
 		{
@@ -504,7 +508,9 @@
 			"sourceIndexes" : 
 			[
 				3,
-				5
+				5,
+				7,
+				9
 			]
 		},
 		{
@@ -512,15 +518,15 @@
 			"sourceIndexes" : 
 			[
 				4,
-				7
+				11
 			]
 		},
 		{
 			"name" : "CMake Rules",
 			"sourceIndexes" : 
 			[
-				9,
-				10
+				13,
+				14
 			]
 		}
 	],
@@ -564,6 +570,28 @@
 			"backtrace" : 4,
 			"compileGroupIndex" : 0,
 			"path" : "filemonitoring.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"path" : "directorypath.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 0,
+			"path" : "directorypath.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"path" : "logfile.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 0,
+			"path" : "logfile.cpp",
 			"sourceGroupIndex" : 0
 		},
 		{

@@ -73,7 +73,6 @@ private:
 private:
     DirectoryPath *m_dirPath;
     DirectoryMonitoringController *m_dirMonitoringController;
-    // QThread *m_dirMonitoringThread;
 
 private:
     ULONG_PTR m_gdiplusToken;

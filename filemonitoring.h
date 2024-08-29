@@ -30,7 +30,7 @@ private:
     static const int BUFFERSIZE = 1024;
     char m_buffer[BUFFERSIZE];
     DWORD m_bytesReturned;
-    OVERLAPPED ovl;
+    // OVERLAPPED ovl;
 
     bool m_running = true;
 

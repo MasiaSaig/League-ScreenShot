@@ -19,29 +19,31 @@ void DirectoryPath::setDirPath(QString dirPath){
 
     qDebug() << "Directory before replace: " << dirPath;
     dirPath = dirPath.replace('/', "\\");
+    qDebug() << "Directory after replace" << dirPath.toLatin1();
 
     // converting to utf16
-    QByteArray byteArray;
-    dirPath.fromUtf8(byteArray);
-    auto toUtf16 = QStringDecoder(QStringDecoder::Utf8);
-    dirPath = toUtf16(byteArray);
+    // QByteArray stringByteArray;
+    // dirPath.fromUtf8(stringByteArray);
+    // auto toUtf16 = QStringDecoder(QStringDecoder::Utf8);
+    // dirPath = toUtf16(stringByteArray);
 
-
-    auto dirPathWString = dirPath.toStdWString();
-    wchar_t *dirPathWChar = const_cast<wchar_t *>(dirPathWString.c_str());
+    // auto dirPathWString = dirPath.toStdWString();
+    // wchar_t *dirPathWChar = const_cast<wchar_t *>(dirPathWString.c_str());
     if(m_dirPath != nullptr){
         delete [] m_dirPath;
     }
-    m_dirPath = new wchar_t[dirPathWString.length()+1];
+    m_dirPath = new wchar_t[dirPath.length()+1];
 
-    qDebug() << "temp dirpath: " << QString::fromWCharArray(dirPathWChar);
-    size_t lenWChardirPath = wcslen(dirPathWChar);
+    m_lenDirPath = dirPath.toWCharArray(m_dirPath);
+    m_dirPath[dirPath.length()] = 0;
+    // size_t lenWChardirPath = wcslen(dirPathWChar);
 
-    wcscpy_s(m_dirPath, lenWChardirPath+1, dirPathWChar);
-    m_lenDirPath = wcslen(m_dirPath);
+    // wcscpy_s(m_dirPath, lenWChardirPath+1, dirPathWChar);
+    // m_lenDirPath = wcslen(m_dirPath);
 
     qDebug() << "Directory after replace and conversion: " << QString::fromWCharArray(m_dirPath);
 
+    HANDLE previous_hdir = m_hDir;
     m_hDir = CreateFile(
         m_dirPath,
         FILE_LIST_DIRECTORY,
@@ -76,6 +78,11 @@ void DirectoryPath::setDirPath(QString dirPath){
     // }
 
     if (m_hDir == INVALID_HANDLE_VALUE) {
+        qDebug() << "\\/-------------------------------------------------\\/";
         qDebug() << "Failed to get directory handle. Error: " << GetLastError() << " Directory path:" << dirPath;
+        qDebug() << "/\\-------------------------------------------------/\\";
     }
+    qDebug() << "New directory handler: " << m_hDir;
+    // needed inorder to stop ReadDirectoryChangesW() function from waiting for a file change, and get new directory handler
+    CancelIoEx(previous_hdir, NULL);
 }

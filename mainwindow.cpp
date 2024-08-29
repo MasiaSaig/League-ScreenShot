@@ -76,7 +76,8 @@ MainWindow::~MainWindow()
     qDebug() << "Cleaning up MainWindow. Closing threads.";
     m_dirMonitoringController->quit();
     // using terminate is discouraged :/
-    m_dirMonitoringController->terminate();
+    // mabe dont use terminate, instead try to move a file to idk invoke an event to close the loop? :shrug:
+    // m_dirMonitoringController->terminate();
     m_dirMonitoringController->wait();
     Gdiplus::GdiplusShutdown(m_gdiplusToken);
 
