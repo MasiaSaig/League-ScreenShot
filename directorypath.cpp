@@ -19,6 +19,14 @@ void DirectoryPath::setDirPath(QString dirPath){
 
     qDebug() << "Directory before replace: " << dirPath;
     dirPath = dirPath.replace('/', "\\");
+
+    // converting to utf16
+    QByteArray byteArray;
+    dirPath.fromUtf8(byteArray);
+    auto toUtf16 = QStringDecoder(QStringDecoder::Utf8);
+    dirPath = toUtf16(byteArray);
+
+
     auto dirPathWString = dirPath.toStdWString();
     wchar_t *dirPathWChar = const_cast<wchar_t *>(dirPathWString.c_str());
     if(m_dirPath != nullptr){

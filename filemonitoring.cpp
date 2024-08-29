@@ -31,20 +31,16 @@ void DirectoryMonitoringController::run(){
     qDebug() << "Starting directory monitoring.";
     // main file monitoring loop
 
-
-
-
-    ::ReadDirectoryChangesW(
-        m_dirPath->getDHandler(),      // Handle to directory
-        m_buffer,                      // Buffer to receive changes
-        BUFFERSIZE,                    // Buffer size
-        FALSE,                         // Monitor subdirectories
-        FILE_NOTIFY_CHANGE_FILE_NAME,  // Changes to monitor    //FILE_NOTIFY_CHANGE_FILE_NAME
-        &m_bytesReturned,              // Number of bytes returned
-        &ovl,                          // Overlapped structure
-        NULL                           // Completion routine
-    );
-
+    // ::ReadDirectoryChangesW(
+    //     m_dirPath->getDHandler(),      // Handle to directory
+    //     m_buffer,                      // Buffer to receive changes
+    //     BUFFERSIZE,                    // Buffer size
+    //     FALSE,                         // Monitor subdirectories
+    //     FILE_NOTIFY_CHANGE_FILE_NAME,  // Changes to monitor    //FILE_NOTIFY_CHANGE_FILE_NAME
+    //     &m_bytesReturned,              // Number of bytes returned
+    //     &ovl,                          // Overlapped structure
+    //     NULL                           // Completion routine
+    // );
 
     while(m_running){
         if (::ReadDirectoryChangesW(
