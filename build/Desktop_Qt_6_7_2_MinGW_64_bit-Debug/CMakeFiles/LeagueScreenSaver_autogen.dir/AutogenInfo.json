@@ -270,6 +270,12 @@
 			null
 		],
 		[
+			"D:/CodeProject/1-C++/Qt/LeagueScreenSaver/logfile.h",
+			"MU",
+			"EWIEGA46WW/moc_logfile.cpp",
+			null
+		],
+		[
 			"D:/CodeProject/1-C++/Qt/LeagueScreenSaver/mainwindow.h",
 			"MU",
 			"EWIEGA46WW/moc_mainwindow.cpp",
@@ -357,6 +363,7 @@
 			"MU",
 			null
 		],
+		[ "D:/CodeProject/1-C++/Qt/LeagueScreenSaver/logfile.cpp", "MU", null ],
 		[ "D:/CodeProject/1-C++/Qt/LeagueScreenSaver/main.cpp", "MU", null ],
 		[
 			"D:/CodeProject/1-C++/Qt/LeagueScreenSaver/mainwindow.cpp",

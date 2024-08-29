@@ -27,6 +27,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         resources.qrc
         filemonitoring.h filemonitoring.cpp
         directorypath.h directorypath.cpp
+        logfile.h logfile.cpp
 
     )
 # Define target properties for Android with Qt 6 as:

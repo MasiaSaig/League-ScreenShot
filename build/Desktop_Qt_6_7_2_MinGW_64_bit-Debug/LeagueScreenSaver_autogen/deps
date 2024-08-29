@@ -10,10 +10,11 @@ LeagueScreenSaver_autogen/timestamp: \
 	D:/CodeProject/1-C++/Qt/LeagueScreenSaver/directorypath.h \
 	D:/CodeProject/1-C++/Qt/LeagueScreenSaver/filemonitoring.cpp \
 	D:/CodeProject/1-C++/Qt/LeagueScreenSaver/filemonitoring.h \
+	D:/CodeProject/1-C++/Qt/LeagueScreenSaver/logfile.cpp \
+	D:/CodeProject/1-C++/Qt/LeagueScreenSaver/logfile.h \
 	D:/CodeProject/1-C++/Qt/LeagueScreenSaver/main.cpp \
 	D:/CodeProject/1-C++/Qt/LeagueScreenSaver/mainwindow.cpp \
 	D:/CodeProject/1-C++/Qt/LeagueScreenSaver/mainwindow.h \
-	H:/Qt/6.7.2/mingw_64/include/QtCore/QDebug \
 	H:/Qt/6.7.2/mingw_64/include/QtCore/QMutex \
 	H:/Qt/6.7.2/mingw_64/include/QtCore/QString \
 	H:/Qt/6.7.2/mingw_64/include/QtCore/QThread \

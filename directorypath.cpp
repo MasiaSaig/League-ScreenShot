@@ -1,4 +1,6 @@
 #include "directorypath.h"
+#include "logfile.h"
+
 
 DirectoryPath::DirectoryPath(QString dirPath) :
      m_mutex(new QMutex)
@@ -17,9 +19,9 @@ DirectoryPath::~DirectoryPath()
 void DirectoryPath::setDirPath(QString dirPath){
     QMutexLocker ml(m_mutex);
 
-    qDebug() << "Directory before replace: " << dirPath;
+    LogFile::instance() << "Changing directory: " << dirPath << '\n';
     dirPath = dirPath.replace('/', "\\");
-    qDebug() << "Directory after replace" << dirPath.toLatin1();
+    LogFile::instance() << "Directory after replace: " << dirPath << '\n';
 
     // converting to utf16
     // QByteArray stringByteArray;
@@ -41,7 +43,7 @@ void DirectoryPath::setDirPath(QString dirPath){
     // wcscpy_s(m_dirPath, lenWChardirPath+1, dirPathWChar);
     // m_lenDirPath = wcslen(m_dirPath);
 
-    qDebug() << "Directory after replace and conversion: " << QString::fromWCharArray(m_dirPath);
+    LogFile::instance() << "Directory after replace and conversion: " << QString::fromWCharArray(m_dirPath) << '\n';
 
     HANDLE previous_hdir = m_hDir;
     m_hDir = CreateFile(
@@ -78,11 +80,8 @@ void DirectoryPath::setDirPath(QString dirPath){
     // }
 
     if (m_hDir == INVALID_HANDLE_VALUE) {
-        qDebug() << "\\/-------------------------------------------------\\/";
-        qDebug() << "Failed to get directory handle. Error: " << GetLastError() << " Directory path:" << dirPath;
-        qDebug() << "/\\-------------------------------------------------/\\";
+        LogFile::instance() << "ERROR! Failed to get directory handle. Error: " << GetLastError() << " Directory path:" << dirPath << '\n';
     }
-    qDebug() << "New directory handler: " << m_hDir;
     // needed inorder to stop ReadDirectoryChangesW() function from waiting for a file change, and get new directory handler
     CancelIoEx(previous_hdir, NULL);
 }

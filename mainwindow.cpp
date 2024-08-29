@@ -14,11 +14,12 @@
 #include <QHBoxLayout>
 #include <QStyle>
 
-MainWindow::MainWindow(QWidget *parent) //QWidget *parent
+#include "logfile.h"
+
+MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    // , ui(new Ui::MainWindow)
 {
-        // ui->setupUi(this);
+    LogFile::instance() << "Initializing Main Window.\n";
 
     // Gdi Plus initialization
     Gdiplus::GdiplusStartupInput gdiplusStartupInput;
@@ -61,11 +62,11 @@ MainWindow::MainWindow(QWidget *parent) //QWidget *parent
 
     // preparing Directory Controller class
     m_dirPath = new DirectoryPath("H:/Riot Games/League of Legends/Screenshots/");
-    qDebug() << "dirPath addres: " << m_dirPath;
-    qDebug() << "dirPath path: " << QString::fromWCharArray(m_dirPath->getDirPath());
+    // LogFile::instance() << "dirPath addres: " << m_dirPath;
+
     // creating a new thread and starting it
     m_dirMonitoringController = new DirectoryMonitoringController(m_dirPath);
-    qDebug() << "Starting threads.";
+    LogFile::instance() << "Starting Thread.\n";
     m_dirMonitoringController->start();
 
 }
@@ -73,7 +74,7 @@ MainWindow::MainWindow(QWidget *parent) //QWidget *parent
 MainWindow::~MainWindow()
 {
     // closing thread and cleaning up data
-    qDebug() << "Cleaning up MainWindow. Closing threads.";
+    LogFile::instance() << "Cleaning up MainWindow and closing threads.\n";
     m_dirMonitoringController->quit();
     // using terminate is discouraged :/
     // mabe dont use terminate, instead try to move a file to idk invoke an event to close the loop? :shrug:
@@ -93,6 +94,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::createActions()
 {
+    LogFile::instance() << "Setting up actions.\n";
     minimizeAction = new QAction(tr("Mi&nimize"), this);
     connect(minimizeAction, &QAction::triggered, this, &QWidget::hide);
 
@@ -105,6 +107,7 @@ void MainWindow::createActions()
 
 void MainWindow::createTrayIcon(const QString &iconPath)
 {
+    LogFile::instance() << "Creating system tray icon.\n";
     trayIconMenu = new QMenu(this);
     trayIconMenu->addAction(minimizeAction);
     trayIconMenu->addAction(restoreAction);
@@ -118,7 +121,7 @@ void MainWindow::createTrayIcon(const QString &iconPath)
 
 void MainWindow::onEditingFinished()
 {
-    qDebug() << "Editing Finished, path: " << pathDirectoryEdit->text();
+    LogFile::instance() << "Editing Finished, path: " << pathDirectoryEdit->text() << '\n';
     if(pathDirectoryEdit->text().back() == '/'){
         m_dirPath->setDirPath(pathDirectoryEdit->text());
     }else{
@@ -128,17 +131,20 @@ void MainWindow::onEditingFinished()
 
 void MainWindow::browse()
 {
-    QString directory = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
-                                                          "/home",
-                                                          QFileDialog::ShowDirsOnly
-                                                              | QFileDialog::DontResolveSymlinks);
+    QString directory = QFileDialog::getExistingDirectory(
+        this, tr("Open Directory"),
+        "/home",
+        QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
     // check if no directory was selected or directory selection was canceled
     if(directory.isEmpty()){
+        LogFile::instance() << "Directory browsing canceled.\n";
         return;
     }
-    pathDirectoryEdit->setText(directory + '/');
-    qDebug() << "Browse, setting path:" << directory;
-    m_dirPath->setDirPath(directory + '/');
+    directory += '/';   // append at the end
+    pathDirectoryEdit->setText(directory);
+    LogFile::instance() << "Directory retrived from browsing folders: " << directory << '\n';
+    m_dirPath->setDirPath(directory);
+
 }
 
 

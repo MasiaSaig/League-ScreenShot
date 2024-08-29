@@ -1,7 +1,6 @@
 D:/CodeProject/1-C++/Qt/LeagueScreenSaver/build/Desktop_Qt_6_7_2_MinGW_64_bit-Debug/LeagueScreenSaver_autogen/EWIEGA46WW/moc_filemonitoring.cpp: D:/CodeProject/1-C++/Qt/LeagueScreenSaver/filemonitoring.h \
   D:/CodeProject/1-C++/Qt/LeagueScreenSaver/build/Desktop_Qt_6_7_2_MinGW_64_bit-Debug/LeagueScreenSaver_autogen/moc_predefs.h \
   D:/CodeProject/1-C++/Qt/LeagueScreenSaver/directorypath.h \
-  H:/Qt/6.7.2/mingw_64/include/QtCore/QDebug \
   H:/Qt/6.7.2/mingw_64/include/QtCore/QMutex \
   H:/Qt/6.7.2/mingw_64/include/QtCore/QString \
   H:/Qt/6.7.2/mingw_64/include/QtCore/QThread \
@@ -32,11 +31,9 @@ D:/CodeProject/1-C++/Qt/LeagueScreenSaver/build/Desktop_Qt_6_7_2_MinGW_64_bit-De
   H:/Qt/6.7.2/mingw_64/include/QtCore/qcontainerfwd.h \
   H:/Qt/6.7.2/mingw_64/include/QtCore/qcontainerinfo.h \
   H:/Qt/6.7.2/mingw_64/include/QtCore/qcontainertools_impl.h \
-  H:/Qt/6.7.2/mingw_64/include/QtCore/qcontiguouscache.h \
   H:/Qt/6.7.2/mingw_64/include/QtCore/qdarwinhelpers.h \
   H:/Qt/6.7.2/mingw_64/include/QtCore/qdatastream.h \
   H:/Qt/6.7.2/mingw_64/include/QtCore/qdeadlinetimer.h \
-  H:/Qt/6.7.2/mingw_64/include/QtCore/qdebug.h \
   H:/Qt/6.7.2/mingw_64/include/QtCore/qelapsedtimer.h \
   H:/Qt/6.7.2/mingw_64/include/QtCore/qexceptionhandling.h \
   H:/Qt/6.7.2/mingw_64/include/QtCore/qflags.h \
@@ -47,7 +44,6 @@ D:/CodeProject/1-C++/Qt/LeagueScreenSaver/build/Desktop_Qt_6_7_2_MinGW_64_bit-De
   H:/Qt/6.7.2/mingw_64/include/QtCore/qgenericatomic.h \
   H:/Qt/6.7.2/mingw_64/include/QtCore/qglobal.h \
   H:/Qt/6.7.2/mingw_64/include/QtCore/qglobalstatic.h \
-  H:/Qt/6.7.2/mingw_64/include/QtCore/qhash.h \
   H:/Qt/6.7.2/mingw_64/include/QtCore/qhashfunctions.h \
   H:/Qt/6.7.2/mingw_64/include/QtCore/qiodevicebase.h \
   H:/Qt/6.7.2/mingw_64/include/QtCore/qiterable.h \
@@ -56,7 +52,6 @@ D:/CodeProject/1-C++/Qt/LeagueScreenSaver/build/Desktop_Qt_6_7_2_MinGW_64_bit-De
   H:/Qt/6.7.2/mingw_64/include/QtCore/qlist.h \
   H:/Qt/6.7.2/mingw_64/include/QtCore/qlogging.h \
   H:/Qt/6.7.2/mingw_64/include/QtCore/qmalloc.h \
-  H:/Qt/6.7.2/mingw_64/include/QtCore/qmap.h \
   H:/Qt/6.7.2/mingw_64/include/QtCore/qmath.h \
   H:/Qt/6.7.2/mingw_64/include/QtCore/qmetacontainer.h \
   H:/Qt/6.7.2/mingw_64/include/QtCore/qmetatype.h \
@@ -74,11 +69,6 @@ D:/CodeProject/1-C++/Qt/LeagueScreenSaver/build/Desktop_Qt_6_7_2_MinGW_64_bit-De
   H:/Qt/6.7.2/mingw_64/include/QtCore/qrefcount.h \
   H:/Qt/6.7.2/mingw_64/include/QtCore/qscopedpointer.h \
   H:/Qt/6.7.2/mingw_64/include/QtCore/qscopeguard.h \
-  H:/Qt/6.7.2/mingw_64/include/QtCore/qset.h \
-  H:/Qt/6.7.2/mingw_64/include/QtCore/qshareddata.h \
-  H:/Qt/6.7.2/mingw_64/include/QtCore/qshareddata_impl.h \
-  H:/Qt/6.7.2/mingw_64/include/QtCore/qsharedpointer.h \
-  H:/Qt/6.7.2/mingw_64/include/QtCore/qsharedpointer_impl.h \
   H:/Qt/6.7.2/mingw_64/include/QtCore/qstring.h \
   H:/Qt/6.7.2/mingw_64/include/QtCore/qstringalgorithms.h \
   H:/Qt/6.7.2/mingw_64/include/QtCore/qstringbuilder.h \
@@ -101,7 +91,6 @@ D:/CodeProject/1-C++/Qt/LeagueScreenSaver/build/Desktop_Qt_6_7_2_MinGW_64_bit-De
   H:/Qt/6.7.2/mingw_64/include/QtCore/qtcoreexports.h \
   H:/Qt/6.7.2/mingw_64/include/QtCore/qtdeprecationmarkers.h \
   H:/Qt/6.7.2/mingw_64/include/QtCore/qtenvironmentvariables.h \
-  H:/Qt/6.7.2/mingw_64/include/QtCore/qtextstream.h \
   H:/Qt/6.7.2/mingw_64/include/QtCore/qthread.h \
   H:/Qt/6.7.2/mingw_64/include/QtCore/qtmetamacros.h \
   H:/Qt/6.7.2/mingw_64/include/QtCore/qtnoop.h \
@@ -115,7 +104,6 @@ D:/CodeProject/1-C++/Qt/LeagueScreenSaver/build/Desktop_Qt_6_7_2_MinGW_64_bit-De
   H:/Qt/6.7.2/mingw_64/include/QtCore/qtypeinfo.h \
   H:/Qt/6.7.2/mingw_64/include/QtCore/qtypes.h \
   H:/Qt/6.7.2/mingw_64/include/QtCore/qutf8stringview.h \
-  H:/Qt/6.7.2/mingw_64/include/QtCore/qvarlengtharray.h \
   H:/Qt/6.7.2/mingw_64/include/QtCore/qversiontagging.h \
   H:/Qt/6.7.2/mingw_64/include/QtCore/qxptype_traits.h \
   H:/Qt/6.7.2/mingw_64/include/QtCore/qyieldcpu.h \
@@ -248,7 +236,6 @@ D:/CodeProject/1-C++/Qt/LeagueScreenSaver/build/Desktop_Qt_6_7_2_MinGW_64_bit-De
   H:/Qt/Tools/mingw1120_64/lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++/cctype \
   H:/Qt/Tools/mingw1120_64/lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++/cerrno \
   H:/Qt/Tools/mingw1120_64/lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++/chrono \
-  H:/Qt/Tools/mingw1120_64/lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++/climits \
   H:/Qt/Tools/mingw1120_64/lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++/clocale \
   H:/Qt/Tools/mingw1120_64/lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++/cmath \
   H:/Qt/Tools/mingw1120_64/lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++/condition_variable \
