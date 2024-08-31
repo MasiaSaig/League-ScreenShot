@@ -21,54 +21,66 @@ MainWindow::MainWindow(QWidget *parent)
 {
     LogFile::instance() << "Initializing Main Window.\n";
 
+    // preparing Directory Controller class
+    m_dirPath = new DirectoryPath();
+    if(!m_dirPath->loadDirPathFromFile()){
+        // set default directory path
+        m_dirPath->setDirPath( "C:/Riot Games/League of Legends/Screenshots/" );
+    }
+
+    // creating a new thread
+    m_dirMonitoringController = new DirectoryMonitoringController(m_dirPath);
+
     // Gdi Plus initialization
     Gdiplus::GdiplusStartupInput gdiplusStartupInput;
     Gdiplus::GdiplusStartup(&m_gdiplusToken, &gdiplusStartupInput, nullptr);
 
+
+    // Creating UI
     const QString iconPath = ":/icon.png";
     createActions();
     createTrayIcon(iconPath);
 
     // creating directory path browsing button
     infoLabel = new QLabel("League of Legends Screenshot directory path");
+    pathCorrectionLabel = new QLabel("(Incorrect)");
     pathDirectoryLabel = new QLabel("Directory:");
-    pathDirectoryButton = new QPushButton();    // "Browse Directory Path"
+    pathDirectoryButton = new QPushButton();
     pathDirectoryButton->setIcon(pathDirectoryButton->style()->standardIcon(QStyle::SP_DirHomeIcon));
-    // TODO: load path from file
-    pathDirectoryEdit = new QLineEdit("H:/Riot Games/League of Legends/Screenshots");
+    pathDirectoryEdit = new QLineEdit(m_dirPath->getQStringDirPath());
 
     // connecting signals
     connect(pathDirectoryButton, SIGNAL(clicked()), SLOT(browse()));
     connect(pathDirectoryEdit, SIGNAL(editingFinished()), SLOT(onEditingFinished()));
 
     // creating layouts
+    hLayoutTop = new QHBoxLayout();
+    hLayoutTop->addWidget(infoLabel, 0);
+    hLayoutTop->addWidget(pathCorrectionLabel, 0, Qt::AlignRight);
+
+    hLayoutBottom = new QHBoxLayout();
+    hLayoutBottom->addWidget(pathDirectoryLabel);
+    hLayoutBottom->addWidget(pathDirectoryEdit);
+    hLayoutBottom->addWidget(pathDirectoryButton);
+
     vLayout = new QVBoxLayout();
-    vLayout->addWidget(infoLabel);
-
-    hLayout = new QHBoxLayout();
-    hLayout->addWidget(pathDirectoryLabel);
-    hLayout->addWidget(pathDirectoryEdit);
-    hLayout->addWidget(pathDirectoryButton);
-
-    vLayout->addLayout(hLayout);
+    vLayout->addLayout(hLayoutTop);
+    vLayout->addLayout(hLayoutBottom);
     setCentralWidget(new QWidget);
     centralWidget()->setLayout(vLayout);
 
-
+    // system tray icon
     trayIcon->show();
     setWindowTitle(tr("League Screen Show"));
     setWindowIcon(QIcon(iconPath));
     setFixedSize(400, 64);
 
-    // preparing Directory Controller class
-    m_dirPath = new DirectoryPath("H:/Riot Games/League of Legends/Screenshots/");
-    // LogFile::instance() << "dirPath addres: " << m_dirPath;
+    updateUI();
 
-    // creating a new thread and starting it
-    m_dirMonitoringController = new DirectoryMonitoringController(m_dirPath);
+
+    // starting new thread, to monitor directory
     LogFile::instance() << "Starting Thread.\n";
     m_dirMonitoringController->start();
-
 }
 
 MainWindow::~MainWindow()
@@ -88,8 +100,22 @@ MainWindow::~MainWindow()
     delete quitAction; delete restoreAction; delete minimizeAction;
     delete pathDirectoryButton; delete pathDirectoryEdit; delete pathDirectoryLabel;
     delete infoLabel;
+    delete pathCorrectionLabel;
+    delete hLayoutBottom;
     delete vLayout;
-    // delete hLayout;
+}
+
+void MainWindow::updateUI()
+{
+    QPalette textColorPalette;
+    if(m_dirPath->isDirPathCorrect()){
+        textColorPalette.setColor(QPalette::WindowText, Qt::green);
+        pathCorrectionLabel->setText("(Correct)");
+    }else{
+        textColorPalette.setColor(QPalette::WindowText, Qt::red);
+        pathCorrectionLabel->setText("(Incorrect)");
+    }
+    pathCorrectionLabel->setPalette(textColorPalette);
 }
 
 void MainWindow::createActions()
@@ -122,11 +148,18 @@ void MainWindow::createTrayIcon(const QString &iconPath)
 void MainWindow::onEditingFinished()
 {
     LogFile::instance() << "Editing Finished, path: " << pathDirectoryEdit->text() << '\n';
-    if(pathDirectoryEdit->text().back() == '/'){
-        m_dirPath->setDirPath(pathDirectoryEdit->text());
-    }else{
-        m_dirPath->setDirPath(pathDirectoryEdit->text() + '/');
+    QString path_temp = pathDirectoryEdit->text();
+    if(path_temp.back() != '/'){
+        path_temp += '/';
     }
+
+    // if directory handler isnt correct, dont save it to file
+    if(!m_dirPath->setDirPath(path_temp)){
+        QMessageBox::information(this, "Error on path editing.", "Unable to set, given directory path. Check given path again, if the folder exists.");
+    }else{
+        m_dirPath->saveDirPathToFile(this);
+    }
+    updateUI();
 }
 
 void MainWindow::browse()
@@ -144,7 +177,9 @@ void MainWindow::browse()
     pathDirectoryEdit->setText(directory);
     LogFile::instance() << "Directory retrived from browsing folders: " << directory << '\n';
     m_dirPath->setDirPath(directory);
+    updateUI();
 
+    m_dirPath->saveDirPathToFile(this);
 }
 
 

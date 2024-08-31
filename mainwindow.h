@@ -55,10 +55,13 @@ signals:
 private:
     void createActions();
     void createTrayIcon(const QString &iconPath);
+    void updateUI();
 
     QVBoxLayout *vLayout;
-    QHBoxLayout *hLayout;
+    QHBoxLayout *hLayoutTop;
+    QHBoxLayout *hLayoutBottom;
     QLabel *infoLabel;
+    QLabel *pathCorrectionLabel;
     QLabel *pathDirectoryLabel;
     QLineEdit *pathDirectoryEdit;
     QPushButton *pathDirectoryButton;

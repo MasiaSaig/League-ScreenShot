@@ -84,6 +84,7 @@ void DirectoryMonitoringController::run(){
 
 
     while (m_running) {
+        m_dirPath->setDirPathCorrect(true);
         // DWORD dw;
         // DWORD result = ::WaitForMultipleObjects(ovl.hEvent, 0);
         // switch (result)
@@ -96,7 +97,6 @@ void DirectoryMonitoringController::run(){
             // ::GetOverlappedResult(m_dirPath->getDHandler(), &ovl, &dw, FALSE);
 
             // HANDLE WINAPI m_hCompletionPort = CreateIoCompletionPort(m_dirPath->getDHandler(), NULL, 0, 1);
-
             if (ReadDirectoryChangesW(
                     m_dirPath->getDHandler(),      // Handle to directory
                     m_buffer,                      // Buffer to receive changes
@@ -107,6 +107,7 @@ void DirectoryMonitoringController::run(){
                     NULL,                          // Overlapped structure          //  //&ovl
                     NULL                           // Completion routine
                     )) {
+
                 FILE_NOTIFY_INFORMATION* fni = reinterpret_cast<FILE_NOTIFY_INFORMATION*>(m_buffer);
                 if (fni->Action == FILE_ACTION_ADDED) {
                     size_t lenFileName = fni->FileNameLength / sizeof(WCHAR);
@@ -138,17 +139,22 @@ void DirectoryMonitoringController::run(){
                     LogFile::instance() << "Closing loop. Running loop again.\n";
                 }else if(error_status == ERROR_OPERATION_ABORTED){
                     LogFile::instance() << "Directory changed. Running loop again.\n";
+                }else if(error_status == ERROR_INVALID_HANDLE){
+                    // waiting for correct folder handler
+                    m_dirPath->setDirPathCorrect(false);
+                    QThread::sleep(1);
                 }else{
+                    m_dirPath->setDirPathCorrect(false);
                     LogFile::instance() << "\\/-------------------------------------------------\\/\n";
                     LogFile::instance() << "ERROR! Failed to read directory changes. Error: " << error_status << '\n';
                     LogFile::instance() << "ERROR! Handler to directory: " << m_dirPath->getDHandler() << '\n';
                     LogFile::instance() << "ERROR! Directory path: " << QString::fromWCharArray(m_dirPath->getDirPath()) << '\n';
                     LogFile::instance() << "/\\-------------------------------------------------/\\\n";
-                    break;
+                    quit();
                 }
             }
 
-        LogFile::instance() << "New change in directory. " << QTime::currentTime().toString() << '\n';
+        // LogFile::instance() << "New change in directory. " << QTime::currentTime().toString() << '\n';
         // QThread::sleep(static_cast<std::chrono::nanoseconds>(500000000));
         // QThread::sleep(1);
     }
@@ -208,6 +214,6 @@ void DirectoryMonitoringController::copyToClipboard(const WCHAR* filePath)
 }
 
 void DirectoryMonitoringController::quit(){
-    CancelIoEx(m_dirPath->getDHandler(), NULL);
     m_running = false;
+    CancelIoEx(m_dirPath->getDHandler(), NULL);
 }

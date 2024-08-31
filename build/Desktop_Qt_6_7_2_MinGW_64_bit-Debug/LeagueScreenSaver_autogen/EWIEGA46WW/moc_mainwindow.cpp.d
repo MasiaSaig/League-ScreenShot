@@ -166,6 +166,7 @@ D:/CodeProject/1-C++/Qt/LeagueScreenSaver/build/Desktop_Qt_6_7_2_MinGW_64_bit-De
   H:/Qt/6.7.2/mingw_64/include/QtWidgets/QFileDialog \
   H:/Qt/6.7.2/mingw_64/include/QtWidgets/QMainWindow \
   H:/Qt/6.7.2/mingw_64/include/QtWidgets/QSystemTrayIcon \
+  H:/Qt/6.7.2/mingw_64/include/QtWidgets/QWidget \
   H:/Qt/6.7.2/mingw_64/include/QtWidgets/qdialog.h \
   H:/Qt/6.7.2/mingw_64/include/QtWidgets/qfiledialog.h \
   H:/Qt/6.7.2/mingw_64/include/QtWidgets/qmainwindow.h \
