@@ -1,0 +1,16 @@
+# ninja log v6
+4	713	7469186160667120	build.ninja	685c3013d58ae4e5
+29	2668	7469186187257999	LeagueScreenshot_autogen/timestamp	94a77317521bca88
+29	2668	7469186187257999	LeagueScreenshot_autogen/mocs_compilation.cpp	94a77317521bca88
+29	2668	7469186187257999	D:/CodeProject/1-C++/Qt/LeagueScreenshot/build/Desktop_Qt_6_7_2_MinGW_64_bit-Debug/LeagueScreenshot_autogen/timestamp	94a77317521bca88
+29	2668	7469186187257999	D:/CodeProject/1-C++/Qt/LeagueScreenshot/build/Desktop_Qt_6_7_2_MinGW_64_bit-Debug/LeagueScreenshot_autogen/mocs_compilation.cpp	94a77317521bca88
+2680	2780	7469186189352619	LeagueScreenshot_autogen/EWIEGA46WW/qrc_Resources.cpp	75d99894837fc1d6
+2680	2780	7469186189352619	D:/CodeProject/1-C++/Qt/LeagueScreenshot/build/Desktop_Qt_6_7_2_MinGW_64_bit-Debug/LeagueScreenshot_autogen/EWIEGA46WW/qrc_Resources.cpp	75d99894837fc1d6
+2799	8681	7469186189661789	CMakeFiles/LeagueScreenshot.dir/logfile.cpp.obj	9606edc60f47d98f
+8681	11008	7469186248483180	CMakeFiles/LeagueScreenshot.dir/LeagueScreenshot_autogen/EWIEGA46WW/qrc_Resources.cpp.obj	839c933baf0f1c86
+2796	11969	7469186189621904	CMakeFiles/LeagueScreenshot.dir/directorypath.cpp.obj	18cf02f452d2d036
+2781	12103	7469186189482276	CMakeFiles/LeagueScreenshot.dir/LeagueScreenshot_autogen/mocs_compilation.cpp.obj	187da29d5765e94
+2785	12104	7469186189512193	CMakeFiles/LeagueScreenshot.dir/main.cpp.obj	3a5ae77e4e28610d
+2792	12183	7469186189582027	CMakeFiles/LeagueScreenshot.dir/filemonitoring.cpp.obj	ae957317d2c15a9d
+2788	12473	7469186189542134	CMakeFiles/LeagueScreenshot.dir/mainwindow.cpp.obj	685347e633b0c163
+12474	12919	7469186286408821	LeagueScreenshot.exe	2d2c3a047ba6e6bc

@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Resources.qrc</file>
+        <file>LeagueScreenshot.ico</file>
+    </qresource>
+</RCC>
