@@ -187,5 +187,15 @@ void MainWindow::browse()
     updateUI();
 }
 
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    if (!event->spontaneous() || !isVisible())
+        return;
+    if (trayIcon->isVisible()) {
+        // prevents application from closing on pressing X button in top-right corner
+        hide();
+        event->ignore();
+    }
+}
 
 #endif
