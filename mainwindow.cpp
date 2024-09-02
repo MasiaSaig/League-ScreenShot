@@ -71,7 +71,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // system tray icon
     trayIcon->show();
-    setWindowTitle(tr("League Screen Show"));
+    setWindowTitle(tr("League ScreenShot"));
     setWindowIcon(QIcon(iconPath));
     setFixedSize(400, 64);
 
