@@ -15,4 +15,4 @@ This program was designated in mind of monitoring creation of new screenshots, m
 - libraries: winApi, GDI+
 
 # Inspiration
-This idea was given to me, by a friend.
+Idea for this program, was given to me, by a friend.
