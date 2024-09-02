@@ -13,3 +13,6 @@ This program was designated in mind of monitoring creation of new screenshots, m
 - C++ compiler, MinGW 11.2.0 64-bit
 - CMake (3.29.3)
 - libraries: winApi, GDI+
+
+# Inspiration
+This idea was given to me, by a friend.
